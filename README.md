@@ -1,5 +1,6 @@
 Giới thiệu Dự án Quản Lý Sinh Viên
 Mô tả dự án
+
 Dự án Quản Lý Sinh Viên là một chương trình viết bằng C++ giúp quản lý thông tin sinh viên trong một hệ thống đơn giản. Chương trình cho phép nhập, lưu trữ, tìm kiếm và sắp xếp danh sách sinh viên một cách hiệu quả. Dữ liệu sinh viên được lưu vào file nhị phân để đảm bảo tính ổn định và dễ dàng truy xuất.
 
 Các tính năng chính
@@ -27,6 +28,7 @@ Khi lưu, dữ liệu được ghi vào file "ctql.dat" ở định dạng nhị
 Khi đọc từ file, danh sách sẽ được làm mới, sau đó sắp xếp theo mã số sinh viên trước khi hiển thị.
 Giao diện Menu
 Người dùng sẽ làm việc với chương trình thông qua menu điều khiển:
+
 ![Screenshot 2025-03-24 175734](https://github.com/user-attachments/assets/7155ede1-5636-47d8-8de4-c7b13d3686e3)
 
 Người dùng nhập số từ 1-8 để chọn chức năng tương ứng.
