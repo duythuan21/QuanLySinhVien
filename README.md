@@ -1,4 +1,4 @@
-Giới thiệu: Dự án Quản Lý Sinh Viên
+_**Dự án Quản Lý Sinh Viên**_
 1. Mô tả dự án
 
 Dự án Quản Lý Sinh Viên là một chương trình viết bằng C++ giúp quản lý thông tin sinh viên trong một hệ thống đơn giản. Chương trình cho phép nhập, lưu trữ, tìm kiếm và sắp xếp danh sách sinh viên một cách hiệu quả. Dữ liệu sinh viên được lưu vào file nhị phân để đảm bảo tính ổn định và dễ dàng truy xuất.
