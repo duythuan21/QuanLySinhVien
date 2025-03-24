@@ -1,48 +1,42 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
-#include <cstring>
+#include <vector>
+#include <string>
 using namespace std;
 
-#define MAX 100
-
 struct SinhVien {
-    char maSV[10];
-    char hoTen[50];
-    char ngaySinh[15];
-    char noiSinh[50];
-    char lopHoc[10];
+    string maSV;
+    string hoTen;
+    string ngaySinh;
+    string noiSinh;
+    string lopHoc;
     float diemToan;
     float diemTriet;
     float diemAnh;
     float diemTB;
-    char xepLoai[15];
+    string xepLoai;
 };
 
-SinhVien danhSachSV[MAX];
-int soLuongSV = 0;
+vector<SinhVien> danhSachSV;
 
 void tinhDiemTB(SinhVien &sv) {
     sv.diemTB = (sv.diemToan + sv.diemTriet + sv.diemAnh) / 3.0;
     if (sv.diemTB >= 8.0)
-        strcpy(sv.xepLoai, "Gioi");
+        sv.xepLoai = "Gioi";
     else if (sv.diemTB >= 6.5)
-        strcpy(sv.xepLoai, "Kha");
+        sv.xepLoai = "Kha";
     else if (sv.diemTB >= 5.0)
-        strcpy(sv.xepLoai, "Trung binh");
+        sv.xepLoai = "Trung binh";
     else
-        strcpy(sv.xepLoai, "Yeu");
+        sv.xepLoai = "Yeu";
 }
 
 void nhapSV() {
-    if (soLuongSV >= MAX) {
-        cout << "Danh sach da day!\n";
-        return;
-    }
     SinhVien sv;
     cout << "Nhap ma SV: "; cin >> sv.maSV;
     cin.ignore();
-    cout << "Nhap ho va ten: "; cin.getline(sv.hoTen, 50);
+    cout << "Nhap ho va ten: "; getline(cin, sv.hoTen);
     cout << "Nhap ngay sinh: "; cin >> sv.ngaySinh;
     cout << "Nhap noi sinh: "; cin >> sv.noiSinh;
     cout << "Nhap lop hoc: "; cin >> sv.lopHoc;
@@ -50,7 +44,7 @@ void nhapSV() {
     cout << "Nhap diem Triet: "; cin >> sv.diemTriet;
     cout << "Nhap diem Anh: "; cin >> sv.diemAnh;
     tinhDiemTB(sv);
-    danhSachSV[soLuongSV++] = sv;
+    danhSachSV.push_back(sv);
     cout << "\nSinh vien da duoc them thanh cong!\n";
 }
 
@@ -60,7 +54,9 @@ void luuFile() {
         cout << "Loi mo file!\n";
         return;
     }
-    file.write((char*)danhSachSV, sizeof(SinhVien) * soLuongSV);
+    size_t size = danhSachSV.size();
+    file.write(reinterpret_cast<char*>(&size), sizeof(size));
+    file.write(reinterpret_cast<char*>(danhSachSV.data()), size * sizeof(SinhVien));
     file.close();
     cout << "Da luu danh sach vao file ctql.dat\n";
 }
@@ -71,10 +67,10 @@ void docFile() {
         cout << "Loi mo file hoac file chua ton tai!\n";
         return;
     }
-    soLuongSV = 0;
-    while (file.read((char*)&danhSachSV[soLuongSV], sizeof(SinhVien))) {
-        soLuongSV++;
-    }
+    size_t size;
+    file.read(reinterpret_cast<char*>(&size), sizeof(size));
+    danhSachSV.resize(size);
+    file.read(reinterpret_cast<char*>(danhSachSV.data()), size * sizeof(SinhVien));
     file.close();
 }
 
@@ -82,20 +78,20 @@ void inDanhSachSV() {
     cout << left << setw(10) << "Ma SV" << setw(20) << "Ho Ten" << setw(12) << "Ngay Sinh"
          << setw(12) << "Noi Sinh" << setw(8) << "Lop" << setw(8) << "Toan"
          << setw(8) << "Triet" << setw(8) << "Anh" << setw(8) << "TB" << "Xep Loai" << endl;
-    for (int i = 0; i < soLuongSV; i++) {
-        cout << left << setw(10) << danhSachSV[i].maSV << setw(20) << danhSachSV[i].hoTen << setw(12) << danhSachSV[i].ngaySinh
-             << setw(12) << danhSachSV[i].noiSinh << setw(8) << danhSachSV[i].lopHoc << setw(8) << danhSachSV[i].diemToan
-             << setw(8) << danhSachSV[i].diemTriet << setw(8) << danhSachSV[i].diemAnh << setw(8) << fixed << setprecision(2) << danhSachSV[i].diemTB
-             << danhSachSV[i].xepLoai << endl;
+    for (const auto &sv : danhSachSV) {
+        cout << left << setw(10) << sv.maSV << setw(20) << sv.hoTen << setw(12) << sv.ngaySinh
+             << setw(12) << sv.noiSinh << setw(8) << sv.lopHoc << setw(8) << sv.diemToan
+             << setw(8) << sv.diemTriet << setw(8) << sv.diemAnh << setw(8) << fixed << setprecision(2) << sv.diemTB
+             << sv.xepLoai << endl;
     }
 }
 
 void timSVTheoMa() {
-    char maSV[10];
+    string maSV;
     cout << "Nhap ma SV can tim: "; cin >> maSV;
-    for (int i = 0; i < soLuongSV; i++) {
-        if (strcmp(danhSachSV[i].maSV, maSV) == 0) {
-            cout << "Tim thay sinh vien: " << danhSachSV[i].hoTen << " - Lop: " << danhSachSV[i].lopHoc << " - Xep loai: " << danhSachSV[i].xepLoai << endl;
+    for (const auto &sv : danhSachSV) {
+        if (sv.maSV == maSV) {
+            cout << "Tim thay sinh vien: " << sv.hoTen << " - Lop: " << sv.lopHoc << " - Xep loai: " << sv.xepLoai << endl;
             return;
         }
     }
